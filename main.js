@@ -12,16 +12,12 @@
  */
 export function main(inputNumber, inputNumberSystem, outputNumberSystem) {
   let simplifiedInput = simplifyInput(inputNumber);
-  console.log("Simplified input: " + simplifiedInput);
   let splitNumbers = splitIntoIndividualNumbers(simplifiedInput, 4);
-  console.log(splitNumbers);
   let decimalNumbers = [];
   for (let i = 0; i < splitNumbers.length; i++) {
       decimalNumbers.push(convertToDec(splitNumbers[i], 2));
   }
-  console.log(decimalNumbers);
   let convertedNumbers=convertToHex(decimalNumbers);
-  console.log("Converted "+convertedNumbers);
   return convertedNumbers.join("");
 }
 
@@ -34,7 +30,6 @@ function simplifyInput(input){
   else{
     let simplifiedInput="";
     let numberOfZeroesToBeAdded=4- (numberOfCharsInput % 4 );
-    console.log("Number of zeroes to be added "+ numberOfZeroesToBeAdded)
     for(let zero=1; zero<=numberOfZeroesToBeAdded; zero++){
           simplifiedInput="0"+ simplifiedInput;
     }
@@ -44,11 +39,7 @@ function simplifyInput(input){
 
 function splitIntoIndividualNumbers(input, numberOfChars){
     let splitNumbers=[];
-    console.log("Conversion in progress...")
     for(let count=0;count<=input.length; count=count+numberOfChars){
-      console.log(
-      input.substring(count,count+numberOfChars)
-      );
       splitNumbers.push(input.substring(count,count+numberOfChars));
     }
     return splitNumbers.filter(element => element !== '');
@@ -59,21 +50,28 @@ function convertToDec(input,numberSystem){
   let reversedInput=input.split("").reverse().join(""); //reversing so its easier to convert via for loop
   for(let position=reversedInput.length-1; position>=0; position--){
     numberInDec+=reversedInput[position] * Math.pow(numberSystem, position);
-    console.log("Converting number "+reversedInput[position]+" to "+reversedInput[position] * Math.pow(numberSystem, position));
   }
-  console.log(numberInDec);
   return numberInDec;
 }
 
 function convertToHex(inputArray) {
-    console.log("Numbers to convert: " + inputArray);
     let convertedNumbers = [];
     for( let i=0; i<=inputArray.length-1;i++){
-      console.log(inputArray[i].toString(16));
-      convertedNumbers.push(inputArray[i].toString(16))
+      convertedNumbers.push(decToHex(inputArray[i]))
     }
-
     return convertedNumbers;
+}
+
+function decToHex(decimalNumber) {
+    if (decimalNumber === 0) return "0"; 
+    const hexChars = "0123456789ABCDEF"; 
+    let hexString = "";
+    while (decimalNumber > 0) {
+        let remainder = decimalNumber % 16;          
+        hexString = hexChars[remainder] + hexString; 
+        decimalNumber = Math.floor(decimalNumber / 16); 
+    }
+    return hexString;
 }
 
 /**
